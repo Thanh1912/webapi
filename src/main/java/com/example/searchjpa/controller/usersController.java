@@ -45,13 +45,6 @@ public class usersController {
         ApiError apiError = new ApiError(errorArrayList,new Meta());
        throw new BadRequestException(apiError);
     }
-    @PostMapping("/posttest")
-    @ResponseBody
-    public ExceptionApi postetst(@RequestBody ExceptionApi ExceptionApi){
-       return ExceptionApi;
-    }
-
-
 
 
     @GetMapping("/users")
