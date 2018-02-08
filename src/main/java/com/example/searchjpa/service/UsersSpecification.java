@@ -48,37 +48,35 @@ public class UsersSpecification {
 
                 for (int j = 0; j < listFilterOr.size(); j++) {
                     if (listFilterOr.get(j).getFilter() != null) {
-                        String value = filter.getOr().get(j).getFilter().getParameter().getEq();
-                        String name = filter.getOr().get(j).getFilter().getAttribute().getName();
-                        predicatesFilterOr.add(cb.equal(root.get(name), value));
+                        predicatesFilterOr.add(getConditionFilter(cb, root, filter.getOr().get(j).getFilter()));
                         Predicate cpFilterOr = cb.or(predicatesFilterOr.toArray(new Predicate[predicatesFilterOr.size()]));
                         if (predicatesFilterOr.size() > 0) {
                             if (cbp == null)
                                 cbp = cpFilterOr;
                             else
-                                cbp = cb.or(cbp,cpFilterOr);
+                                cbp = cb.or(cbp, cpFilterOr);
                             predicatesFilterOr.clear();
                         }
                     }
                     if (listFilterOr.get(j).getAnd() != null) {
                         ArrayList<And> listFilterOrAnd = listFilterOr.get(j).getAnd();
-                         Collection<Predicate> predicatesFilterOrAnd = new ArrayList<>();
+                        Collection<Predicate> predicatesFilterOrAnd = new ArrayList<>();
                         for (int k = 0; k < listFilterOrAnd.size(); k++) {
-                            predicatesFilterOrAnd.add(cb.equal(root.get(listFilterOrAnd.get(k).getFilter().getAttribute().getName()), listFilterOrAnd.get(k).getFilter().getParameter().getEq()));
+                            predicatesFilterOrAnd.add(getConditionFilter(cb, root, listFilterOrAnd.get(k).getFilter()));
                         }
                         if (predicatesFilterOrAnd.size() > 0) {
                             Predicate cpFilterOrAnd = cb.and(predicatesFilterOrAnd.toArray(new Predicate[predicatesFilterOrAnd.size()]));
                             if (cbp == null)
                                 cbp = cpFilterOrAnd;
                             else
-                                cbp = cb.or(cbp,cpFilterOrAnd );
+                                cbp = cb.or(cbp, cpFilterOrAnd);
                         }
                     }
                     if (listFilterOr.get(j).getOr() != null) {
                         ArrayList<Or> listFilterOrOr = listFilterOr.get(j).getOr();
-                         Collection<Predicate> predicatesFilterOrOr = new ArrayList<>();
+                        Collection<Predicate> predicatesFilterOrOr = new ArrayList<>();
                         for (int k = 0; k < listFilterOrOr.size(); k++) {
-                            predicatesFilterOrOr.add(cb.equal(root.get(listFilterOrOr.get(k).getFilter().getAttribute().getName()), listFilterOrOr.get(k).getFilter().getParameter().getEq()));
+                            predicatesFilterOrOr.add(getConditionFilter(cb, root, listFilterOrOr.get(k).getFilter()));
                         }
                         Predicate cpFilterOrOr = cb.or(predicatesFilterOrOr.toArray(new Predicate[predicatesFilterOrOr.size()]));
                         if (predicatesFilterOrOr.size() > 0)
@@ -95,16 +93,14 @@ public class UsersSpecification {
             private Predicate addFilterAnd(Collection<Predicate> predicates, CriteriaBuilder cb, Root<Users> root, Filter filter) {
                 Predicate cbp = null;
                 ArrayList<And> listFilterAnd = filter.getAnd();
-                 Collection<Predicate> predicatesFilterAnd = new ArrayList<>();
+                Collection<Predicate> predicatesFilterAnd = new ArrayList<>();
 
                 int k1 = 0;
                 int sizeAndAnd = 0;
                 int sizeAndOr = 0;
                 for (int j = 0; j < listFilterAnd.size(); j++) {
                     if (listFilterAnd.get(j).getFilter() != null) {
-                        String value = filter.getAnd().get(j).getFilter().getParameter().getEq();
-                        String name = filter.getAnd().get(j).getFilter().getAttribute().getName();
-                        predicatesFilterAnd.add(cb.equal(root.get(name), value));
+                        predicatesFilterAnd.add(getConditionFilter(cb, root, filter.getAnd().get(j).getFilter()));
                         Predicate cpFilterAnd = cb.and(predicatesFilterAnd.toArray(new Predicate[predicatesFilterAnd.size()]));
                         if (predicatesFilterAnd.size() > 0) {
                             if (cbp == null)
@@ -117,9 +113,9 @@ public class UsersSpecification {
                     if (listFilterAnd.get(j).getAnd() != null) {
                         ArrayList<And> listFilterAnd_listAnd = listFilterAnd.get(j).getAnd();
                         sizeAndAnd = listFilterAnd_listAnd.size();
-                         Collection<Predicate> predicatesFilterAndAnd = new ArrayList<>();
+                        Collection<Predicate> predicatesFilterAndAnd = new ArrayList<>();
                         for (int k = 0; k < sizeAndAnd; k++) {
-                            predicatesFilterAndAnd.add(cb.equal(root.get(listFilterAnd_listAnd.get(k).getFilter().getAttribute().getName()), listFilterAnd_listAnd.get(k).getFilter().getParameter().getEq()));
+                            predicatesFilterAndAnd.add(getConditionFilter(cb, root, listFilterAnd_listAnd.get(k).getFilter()));
                         }
                         if (predicatesFilterAndAnd.size() > 0) {
                             Predicate cpFilterAndAnd = cb.and(predicatesFilterAndAnd.toArray(new Predicate[predicatesFilterAndAnd.size()]));
@@ -132,9 +128,9 @@ public class UsersSpecification {
                     if (listFilterAnd.get(j).getOr() != null) {
                         ArrayList<Or> listFilterAndOr = listFilterAnd.get(j).getOr();
                         sizeAndOr = listFilterAndOr.size();
-                         Collection<Predicate> predicatesFilterAndOr = new ArrayList<>();
+                        Collection<Predicate> predicatesFilterAndOr = new ArrayList<>();
                         for (int k = 0; k < sizeAndOr; k++) {
-                            predicatesFilterAndOr.add(cb.equal(root.get(listFilterAndOr.get(k).getFilter().getAttribute().getName()), listFilterAndOr.get(k).getFilter().getParameter().getEq()));
+                            predicatesFilterAndOr.add(getConditionFilter(cb, root, listFilterAndOr.get(k).getFilter()));
                         }
                         Predicate cpFilterOrOr = cb.or(predicatesFilterAndOr.toArray(new Predicate[predicatesFilterAndOr.size()]));
                         if (predicatesFilterAndOr.size() > 0)
@@ -148,6 +144,23 @@ public class UsersSpecification {
                 return cbp;
             }
         };
+    }
+
+    private static Predicate getConditionFilter(CriteriaBuilder cb, Root<Users> root, Filter filter) {
+        if (filter.getParameter().getEq() != null) {
+            System.out.println("getEq");
+            return cb.equal(root.get(filter.getAttribute().getName()), filter.getParameter().getEq());
+        }
+
+        if (filter.getParameter().getStarts_with() != null) {
+            System.out.println("getStarts_with");
+            return cb.like(root.get(filter.getAttribute().getName()), filter.getParameter().getStarts_with() + "%");
+        }
+       if( filter.getParameter().isIs_null()){
+           return cb.isNull(root.get(filter.getAttribute().getName()));
+       }
+
+        return cb.equal(root.get(filter.getAttribute().getName()), filter.getParameter().getEq());
     }
 
 
