@@ -3,11 +3,8 @@ package com.example.searchjpa.controller;
 import com.example.searchjpa.DTO.*;
 import com.example.searchjpa.Exception.ApiError;
 import com.example.searchjpa.Exception.BadRequestException;
-import com.example.searchjpa.Exception.BadRequestRuntimeException;
-import com.example.searchjpa.Exception.ResourceNotFoundException;
 import com.example.searchjpa.Exception.model.Errors;
 import com.example.searchjpa.Exception.model.Error;
-import com.example.searchjpa.Exception.model.ExceptionApi;
 import com.example.searchjpa.Exception.model.Meta;
 import com.example.searchjpa.model.Users;
 import com.example.searchjpa.repository.UsersRepository;
@@ -17,12 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.*;
 
 @RestController

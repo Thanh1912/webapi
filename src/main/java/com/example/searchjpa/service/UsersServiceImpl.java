@@ -41,6 +41,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public Page<Users> findAllFilterPost(RootObject rootObject, Pageable pageable) {
+      Specification<Users> pp=  UsersSpecification.containsTextInAttributeseqUsePostOject(rootObject);
         Specification specification=Specifications.where(
                 UsersSpecification.containsTextInAttributeseqUsePostOject(rootObject));
         return userRepository.findAll(specification,pageable);
